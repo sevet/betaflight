@@ -204,6 +204,9 @@ void uartReconfigure(uartPort_t *uartPort);
 #ifdef USE_PLATFORM_UART_IDLE_CALLBACK
 void uartSetIdleCallback(serialPort_t *instance, serialIdleCallbackPtr callback);
 #endif
+#if UART_TRAIT_ASYNC_RECONFIGURE
+bool uartTrySetBaudRate(serialPort_t *instance, uint32_t baudRate);
+#endif
 
 void uartConfigureDma(uartDevice_t *uartdev);
 
