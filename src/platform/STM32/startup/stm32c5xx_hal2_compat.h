@@ -416,6 +416,7 @@ typedef enum { ERROR = 0, SUCCESS = !ERROR } ErrorStatus;
  * combined FIFO-aware names. Map old names used by serial_uart_ll.c.
  * -------------------------------------------------------------------------- */
 #define LL_USART_EnableIT_TXE       LL_USART_EnableIT_TXE_TXFNF
+#define LL_USART_DisableIT_TXE      LL_USART_DisableIT_TXE_TXFNF
 #define LL_USART_IsEnabledIT_TXE    LL_USART_IsEnabledIT_TXE_TXFNF
 #define LL_USART_IsActiveFlag_TXE   LL_USART_IsActiveFlag_TXE_TXFNF
 #define LL_USART_IsEnabledIT_RXNE   LL_USART_IsEnabledIT_RXNE_RXFNE

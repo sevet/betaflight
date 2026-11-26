@@ -261,13 +261,17 @@ void uartReconfigure(uartPort_t *uartPort)
     const bool irqWasEnabled = NVIC_GetEnableIRQ(irqn) != 0;
     const bool canTx = uartCanTx(uartPort);
 
-    // Hold TX off for the whole teardown: neither writers nor the TXE handler may
-    // feed bytes into a peripheral that is being reconfigured.
-    uartPort->txInhibited = true;
-
     // Mask the line first: clearing the enables below stops new requests, but an IRQ already
     // latched in the NVIC is still taken and would re-enter uartIrqHandler mid-teardown.
     NVIC_DisableIRQ(irqn);
+    __DSB();
+    __ISB();
+
+    // Hold TX off for the whole teardown: neither writers nor the TXE handler may
+    // feed bytes into a peripheral that is being reconfigured. Set it only after the
+    // line is masked: the handler skips its TXE branch while txInhibited is set, so if
+    // it ran now with TXEIE and TXE both set it would re-enter forever.
+    uartPort->txInhibited = true;
 
     // Disable all UART interrupts before disabling the peripheral to prevent
     // an interrupt storm. With UE=0, TC is always asserted (transmitter idle),
